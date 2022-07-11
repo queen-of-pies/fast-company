@@ -6,7 +6,7 @@ const Users = () => {
     const [users, setUsers] = useState(api.users.fetchAll());
 
     const handleDelete = (id) => {
-        setUsers(users.filter((user) => user._id !== id));
+        setUsers((prevState) => prevState.filter((user) => user._id !== id));
     };
 
     const renderPhrase = (number) => {
