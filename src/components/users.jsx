@@ -12,7 +12,6 @@ const Users = (props) => {
     const pageSize = 5;
 
     const handlePageChange = (pageIndex) => {
-        console.log("pageIndex", pageIndex);
         setCurrentPage(pageIndex);
     };
 
