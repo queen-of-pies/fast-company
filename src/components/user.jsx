@@ -1,6 +1,7 @@
 import React from "react";
 import QualitieList from "./qualitie";
 import Bookmark from "./bookmark";
+import PropTypes from "prop-types";
 
 const User = (props) => {
     const {
@@ -18,16 +19,19 @@ const User = (props) => {
         <tr key={_id}>
             <th scope="row">{name}</th>
             <td>
-                <QualitieList qualities={qualities}/>
+                <QualitieList qualities={qualities} />
             </td>
             <td>{profession.name}</td>
             <td>{completedMeetings}</td>
             <td>{rate}</td>
-            <td  onClick={()=>onFavoritesChange(_id)}>
+            <td onClick={() => onFavoritesChange(_id)}>
                 <Bookmark favorites={favorites} />
             </td>
             <td>
-                <button className="btn btn-danger" onClick={() => onDelete(_id)}>
+                <button
+                    className="btn btn-danger"
+                    onClick={() => onDelete(_id)}
+                >
                     delete
                 </button>
             </td>
@@ -35,4 +39,16 @@ const User = (props) => {
     );
 };
 
-export default User
+User.propTypes = {
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    qualities: PropTypes.arrayOf(PropTypes.object).isRequired,
+    profession: PropTypes.object.isRequired,
+    completedMeetings: PropTypes.number.isRequired,
+    rate: PropTypes.number.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    favorites: PropTypes.bool.isRequired,
+    onFavoritesChange: PropTypes.func.isRequired
+};
+
+export default User;
