@@ -3,20 +3,19 @@ import QualitieList from "./qualitie";
 import Bookmark from "./bookmark";
 import PropTypes from "prop-types";
 
-const User = (props) => {
-    const {
-        _id,
-        name,
-        qualities,
-        profession,
-        completedMeetings,
-        rate,
-        onDelete,
-        favorites,
-        onFavoritesChange
-    } = props;
+const User = ({
+    _id,
+    name,
+    qualities,
+    profession,
+    completedMeetings,
+    rate,
+    onDelete,
+    favorites,
+    onFavoritesChange
+}) => {
     return (
-        <tr key={_id}>
+        <tr>
             <th scope="row">{name}</th>
             <td>
                 <QualitieList qualities={qualities} />

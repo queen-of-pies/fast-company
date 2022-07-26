@@ -1,9 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SearchStatus = (props) => {
-    const { users } = props;
-
+const SearchStatus = ({ users }) => {
     const renderPhrase = (number) => {
         if (number > 1 && number < 5 && number % 10 > 1 && number % 10 < 5) {
             return "человека";

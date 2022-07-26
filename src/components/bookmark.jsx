@@ -1,9 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Bookmark = (props) => {
-    const { favorites } = props;
-
+const Bookmark = ({ favorites }) => {
     return favorites ? (
         <i className="bi bi-bookmark-fill"></i>
     ) : (
