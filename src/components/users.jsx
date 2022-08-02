@@ -20,7 +20,7 @@ const Users = ({ users, onDelete, onFavoritesChange }) => {
         setCurrentPage(1);
     }, [selectedProf]);
 
-    const pageSize = 5;
+    const pageSize = 4;
 
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
@@ -31,7 +31,7 @@ const Users = ({ users, onDelete, onFavoritesChange }) => {
     };
 
     const filteredUsers = selectedProf
-        ? users.filter((user) => user.profession === selectedProf)
+        ? users.filter((user) => user.profession._id === selectedProf._id)
         : users;
     const count = filteredUsers.length;
 
