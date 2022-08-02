@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Users from "./users";
 import api from "../api";
-import SearchStatus from "./searchStatus";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -27,7 +26,6 @@ const App = () => {
 
     return (
         <>
-            <SearchStatus users={users} />
             <Users
                 users={users}
                 onDelete={handleDelete}
