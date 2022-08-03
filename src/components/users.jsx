@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import User from "./user";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import GroupList from "./groupList";
 import api from "../api";
 import PropTypes from "prop-types";
 import SearchStatus from "./searchStatus";
+import UsersTable from "./usersTable";
+import _ from "lodash";
 
-const Users = ({ users, onDelete, onFavoritesChange }) => {
+const Users = ({ users, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
 
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
@@ -20,7 +22,7 @@ const Users = ({ users, onDelete, onFavoritesChange }) => {
         setCurrentPage(1);
     }, [selectedProf]);
 
-    const pageSize = 4;
+    const pageSize = 8;
 
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
@@ -30,12 +32,23 @@ const Users = ({ users, onDelete, onFavoritesChange }) => {
         setCurrentPage(pageIndex);
     };
 
+    const handleSort = (item) => {
+        if (sortBy.iter === item) {
+            setSortBy((prevState) => ({
+                ...prevState,
+                order: prevState.order === "asc" ? "desc" : "asc"
+            }));
+        } else {
+            setSortBy({ iter: item, order: "asc" });
+        }
+    };
+
     const filteredUsers = selectedProf
         ? users.filter((user) => user.profession._id === selectedProf._id)
         : users;
     const count = filteredUsers.length;
-
-    const userCrop = paginate(filteredUsers, currentPage, pageSize);
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
+    const userCrop = paginate(sortedUsers, currentPage, pageSize);
     const clearFilter = () => setSelectedProf();
 
     return (
@@ -58,29 +71,11 @@ const Users = ({ users, onDelete, onFavoritesChange }) => {
             <div className="d-flex flex-column">
                 <SearchStatus users={filteredUsers} />
                 {count > 0 && (
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Имя</th>
-                                <th scope="col">Качества</th>
-                                <th scope="col">Профессия</th>
-                                <th scope="col">Встретился, раз</th>
-                                <th scope="col">Оценка</th>
-                                <th scope="col">Избранное</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {userCrop.map((user) => (
-                                <User
-                                    key={user._id}
-                                    {...user}
-                                    onDelete={onDelete}
-                                    onFavoritesChange={onFavoritesChange}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
+                    <UsersTable
+                        userCrop={userCrop}
+                        {...rest}
+                        onSort={handleSort}
+                    />
                 )}
                 <div className="d-flex justify-content-center">
                     <Pagination
