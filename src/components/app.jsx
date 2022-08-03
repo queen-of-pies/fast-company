@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Users from "./users";
-import api from "../api";
-import SearchStatus from "./searchStatus";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import api from "../api";
 
 const App = () => {
-    const initialState = api.users
-        .fetchAll()
-        .map((item) => ({ ...item, favorites: false }));
-    const [users, setUsers] = useState(initialState);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        api.users.fetchAll().then((data) => {
+            const users = data.map((item) => ({ ...item, favorites: false }));
+            setUsers(users);
+        });
+    }, []);
 
     const handleDelete = (id) => {
         setUsers((prevState) => prevState.filter((user) => user._id !== id));
@@ -27,7 +30,6 @@ const App = () => {
 
     return (
         <>
-            <SearchStatus users={users} />
             <Users
                 users={users}
                 onDelete={handleDelete}
