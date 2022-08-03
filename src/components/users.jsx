@@ -33,14 +33,7 @@ const Users = ({ users, ...rest }) => {
     };
 
     const handleSort = (item) => {
-        if (sortBy.iter === item) {
-            setSortBy((prevState) => ({
-                ...prevState,
-                order: prevState.order === "asc" ? "desc" : "asc"
-            }));
-        } else {
-            setSortBy({ iter: item, order: "asc" });
-        }
+        setSortBy(item);
     };
 
     const filteredUsers = selectedProf
@@ -75,6 +68,7 @@ const Users = ({ users, ...rest }) => {
                         userCrop={userCrop}
                         {...rest}
                         onSort={handleSort}
+                        selectedSort={sortBy}
                     />
                 )}
                 <div className="d-flex justify-content-center">
