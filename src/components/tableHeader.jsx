@@ -12,6 +12,19 @@ const TableHeader = ({ selectedSort, onSort, columns }) => {
             onSort({ path: item, order: "asc" });
         }
     };
+
+    const renderIcon = (column) => {
+        if (
+            columns[column].path &&
+            selectedSort.path === columns[column].path
+        ) {
+            return selectedSort.order === "asc" ? (
+                <i className="bi bi-caret-up-fill m-lg-1"></i>
+            ) : (
+                <i className="bi bi-caret-down-fill m-lg-1"></i>
+            );
+        }
+    };
     return (
         <thead>
             <tr>
@@ -26,7 +39,9 @@ const TableHeader = ({ selectedSort, onSort, columns }) => {
                         key={column}
                         {...{ role: columns[column].path && "button" }}
                     >
-                        {columns[column].name}
+                        <div className="d-flex">
+                            {columns[column].name} {renderIcon(column)}
+                        </div>
                     </th>
                 ))}
             </tr>
