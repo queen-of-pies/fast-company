@@ -1,29 +1,25 @@
 import React from "react";
-import User from "./user";
 import PropTypes from "prop-types";
 import TableHeader from "./tableHeader";
+import TableBody from "./tableBody";
 
 const UsersTable = ({ userCrop, onSort, selectedSort, ...rest }) => {
     const columns = {
-        name: { iter: "name", name: "Имя" },
+        name: { path: "name", name: "Имя" },
         qualities: { name: "Качества" },
-        profession: { iter: "profession.name", name: "Профессия" },
+        profession: { path: "profession.name", name: "Профессия" },
         completedMeetings: {
-            iter: "completedMeetings",
+            path: "completedMeetings",
             name: "Встретился, раз"
         },
-        rate: { iter: "rate", name: "Оценка" },
-        bookmark: { iter: "bookmark", name: "Избранное" },
+        rate: { path: "rate", name: "Оценка" },
+        bookmark: { path: "bookmark", name: "Избранное" },
         delete: {}
     };
     return (
         <table className="table">
             <TableHeader {...{ selectedSort, onSort, columns }} />
-            <tbody>
-                {userCrop.map((user) => (
-                    <User key={user._id} {...user} {...rest} />
-                ))}
-            </tbody>
+            <TableBody columns={columns} data={userCrop} />
         </table>
     );
 };
