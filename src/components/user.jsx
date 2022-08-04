@@ -23,8 +23,8 @@ const User = ({
             <td>{profession.name}</td>
             <td>{completedMeetings}</td>
             <td>{rate}</td>
-            <td onClick={() => onFavoritesChange(_id)}>
-                <Bookmark favorites={favorites} />
+            <td >
+                <Bookmark favorites={favorites} onClick={() => onFavoritesChange(_id)} />
             </td>
             <td>
                 <button

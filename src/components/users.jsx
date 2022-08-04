@@ -8,7 +8,7 @@ import SearchStatus from "./searchStatus";
 import UsersTable from "./usersTable";
 import _ from "lodash";
 
-const Users = ({ users, ...rest }) => {
+const Users = ({ users, onFavoritesChange, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -40,7 +40,7 @@ const Users = ({ users, ...rest }) => {
         ? users.filter((user) => user.profession._id === selectedProf._id)
         : users;
     const count = filteredUsers.length;
-    const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
     const userCrop = paginate(sortedUsers, currentPage, pageSize);
     const clearFilter = () => setSelectedProf();
 
@@ -66,6 +66,7 @@ const Users = ({ users, ...rest }) => {
                 {count > 0 && (
                     <UsersTable
                         userCrop={userCrop}
+                        onFavoritesChange={onFavoritesChange}
                         {...rest}
                         onSort={handleSort}
                         selectedSort={sortBy}

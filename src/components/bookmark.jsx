@@ -1,16 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Bookmark = ({ favorites }) => {
+const Bookmark = ({ favorites, onClick }) => {
     return favorites ? (
-        <i className="bi bi-bookmark-fill"></i>
+        <i onClick={onClick} className="bi bi-bookmark-fill"></i>
     ) : (
-        <i className="bi bi-bookmark"></i>
+        <i onClick={onClick} className="bi bi-bookmark"></i>
     );
 };
 
 Bookmark.propTypes = {
-    favorites: PropTypes.bool.isRequired
+    favorites: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired
 };
 
 export default Bookmark;
