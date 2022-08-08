@@ -24,7 +24,7 @@ const UsersTable = ({
         },
         rate: { path: "rate", name: "Оценка" },
         bookmark: {
-            path: "bookmark",
+            path: "favorites",
             name: "Избранное",
             component: (user) => (
                 <Bookmark
