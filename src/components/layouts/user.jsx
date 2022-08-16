@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import QualitiesList from "../qualitiesList";
+import PropTypes from "prop-types";
 
-const User = () => {
+const User = ({ userId }) => {
     const [user, setUser] = useState();
-    const { userId } = useParams();
 
     const history = useHistory();
 
@@ -30,6 +30,10 @@ const User = () => {
             <button onClick={handleMoveToAllUsers}>Все пользователи</button>
         </>
     );
+};
+
+User.propTypes = {
+    userId: PropTypes.string.isRequired
 };
 
 export default User;
