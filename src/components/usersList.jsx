@@ -12,6 +12,7 @@ const UsersList = () => {
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
@@ -47,6 +48,7 @@ const UsersList = () => {
     };
 
     const handleProfessionSelect = (item) => {
+        setSearch("");
         setSelectedProf(item);
     };
 
@@ -57,9 +59,20 @@ const UsersList = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
+
+    const handleSearch = (e) => {
+        setSelectedProf();
+        const { value } = e.target;
+        setSearch(value);
+    };
+
     if (users.length) {
         const filteredUsers = selectedProf
             ? users.filter((user) => user.profession._id === selectedProf._id)
+            : search
+            ? users.filter((user) =>
+                  user.name.toLowerCase().includes(search.toLowerCase())
+              )
             : users;
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(
@@ -92,6 +105,12 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus users={filteredUsers} />
+                    <input
+                        placeholder="Search..."
+                        value={search}
+                        onChange={handleSearch}
+                        style={{ outline: "none" }}
+                    />
                     {count > 0 && (
                         <UsersTable
                             userCrop={userCrop}
