@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import TextField from "../textField";
 import validator from "../../utils/validator";
+import TextField from "../common/form/textField";
 
-const Login = () => {
+const LoginForm = () => {
     const [data, setData] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({});
 
@@ -53,37 +53,33 @@ const Login = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="row">
-                <div className="col-md-6 offset-md-3 p-4 shadow">
-                    <h3 className="mb-4">Login</h3>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Email"
-                            onChange={handleChange}
-                            name="email"
-                            value={data.email}
-                            error={errors.email}
-                        />
-                        <TextField
-                            label="Password"
-                            type="password"
-                            onChange={handleChange}
-                            name="password"
-                            value={data.password}
-                            error={errors.password}
-                        />
-                        <button
-                            className="btn btn-primary w-100 mx-auto"
-                            disabled={!isValid}
-                        >
-                            Submit
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <>
+            <h3 className="mb-4">Login</h3>
+            <form onSubmit={handleSubmit}>
+                <TextField
+                    label="Email"
+                    onChange={handleChange}
+                    name="email"
+                    value={data.email}
+                    error={errors.email}
+                />
+                <TextField
+                    label="Password"
+                    type="password"
+                    onChange={handleChange}
+                    name="password"
+                    value={data.password}
+                    error={errors.password}
+                />
+                <button
+                    className="btn btn-primary w-100 mx-auto"
+                    disabled={!isValid}
+                >
+                    Submit
+                </button>
+            </form>
+        </>
     );
 };
 
-export default Login;
+export default LoginForm;

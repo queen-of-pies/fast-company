@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import api from "../../api";
+import api from "../../../api";
 import { useHistory } from "react-router-dom";
-import QualitiesList from "../qualitiesList";
+import QualitiesList from "../../ui/qualities/qualitiesList";
 import PropTypes from "prop-types";
 
-const User = ({ userId }) => {
+const UserPage = ({ userId }) => {
     const [user, setUser] = useState();
 
     const history = useHistory();
@@ -32,8 +32,8 @@ const User = ({ userId }) => {
     );
 };
 
-User.propTypes = {
+UserPage.propTypes = {
     userId: PropTypes.string.isRequired
 };
 
-export default User;
+export default UserPage;
