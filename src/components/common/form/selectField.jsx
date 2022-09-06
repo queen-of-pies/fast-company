@@ -4,9 +4,7 @@ import PropTypes from "prop-types";
 const SelectField = ({ label, options, onChange, name, value, error }) => {
     const optionsArray =
         !Array.isArray(options) && typeof options === "object"
-            ? Object.keys(options).map((option) =>
-                  optionsArray.push(options[option])
-              )
+            ? Object.keys(options).map((option) => options[option])
             : options;
 
     return (
@@ -38,12 +36,11 @@ const SelectField = ({ label, options, onChange, name, value, error }) => {
 
 SelectField.propTypes = {
     label: PropTypes.string.isRequired,
-    options: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
-        .isRequired,
+    options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
-    error: PropTypes.string.isRequired
+    error: PropTypes.string
 };
 
 export default SelectField;

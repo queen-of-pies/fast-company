@@ -4,18 +4,27 @@ import TextField from "../common/form/textField";
 import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
+import MultiSelectField from "../common/form/multiSelectField";
+import CheckboxField from "../common/form/checkboxField";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
         email: "",
         password: "",
         profession: "",
-        sex: "male"
+        sex: "male",
+        qualities: [],
+        license: false
     });
     const [errors, setErrors] = useState({});
     const [professions, setProfessions] = useState();
+    const [qualities, setQualities] = useState({});
+
     useEffect(() => {
         api.professions.fetchAll().then((data) => setProfessions(data));
+    }, []);
+    useEffect(() => {
+        api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
 
     useEffect(() => {
@@ -42,6 +51,11 @@ const RegisterForm = () => {
         },
         profession: {
             isRequired: { message: "Необходимо выбрать профессию." }
+        },
+        license: {
+            isRequired: {
+                message: "Необходимо принять лицензионное соглашение."
+            }
         }
     };
 
@@ -104,6 +118,21 @@ const RegisterForm = () => {
                     name="sex"
                     value={data.sex}
                 />
+                <MultiSelectField
+                    label="Выберите качества"
+                    options={qualities}
+                    onChange={handleChange}
+                    name="qualities"
+                    value={data.qualities}
+                />
+                <CheckboxField
+                    onChange={handleChange}
+                    name="license"
+                    value={data.license}
+                    error={errors.license}
+                >
+                    Принимаю <a>лицензионное соглашение</a>
+                </CheckboxField>
                 <button
                     className="btn btn-primary w-100 mx-auto"
                     disabled={!isValid}
