@@ -9,13 +9,13 @@ const SelectField = ({ label, options, onChange, name, value, error }) => {
 
     return (
         <div className="mb-4">
-            <label htmlFor="validationCustom04" className="form-label">
+            <label htmlFor={name} className="form-label">
                 {label}
             </label>
             <select
                 onChange={onChange}
                 className={`form-select ${error && "is-invalid"}`}
-                id="validationCustom04"
+                id={name}
                 name={name}
                 value={value}
             >

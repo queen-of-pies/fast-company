@@ -12,10 +12,11 @@ const UserPage = ({ userId }) => {
     useEffect(() => {
         api.users.getById(userId).then((user) => {
             setUser(user);
+            console.log("user: ", user);
         });
     }, []);
-    const handleMoveToAllUsers = () => {
-        history.push("/users");
+    const handleMoveToEdit = () => {
+        history.push(`/users/${userId}/edit`);
     };
     if (!user) {
         return <h1>Loading</h1>;
@@ -27,7 +28,7 @@ const UserPage = ({ userId }) => {
             <QualitiesList qualities={user.qualities} />
             <h3>CompletedMeetings: {user.completedMeetings}</h3>
             <h2>Rate: {user.rate}</h2>
-            <button onClick={handleMoveToAllUsers}>Все пользователи</button>
+            <button onClick={handleMoveToEdit}>Редактировать</button>
         </>
     );
 };

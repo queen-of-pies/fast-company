@@ -6,10 +6,17 @@ const MultiSelectField = ({ options, label, onChange, name, value }) => {
     const optionsArray =
         !Array.isArray(options) && typeof options === "object"
             ? Object.keys(options).map((option) => ({
-                  value: option,
-                  label: options[option].name
+                  value: options[option]._id,
+                  label: options[option].name,
+                  color: options[option].color
               }))
             : options;
+
+    const transformedValue = value.map((val) => ({
+        value: val._id,
+        label: val.name,
+        color: val.color
+    }));
 
     const handleChange = (e) => {
         const data = { target: { name, value: e } };
@@ -26,7 +33,9 @@ const MultiSelectField = ({ options, label, onChange, name, value }) => {
                     options={optionsArray}
                     onChange={handleChange}
                     name={name}
-                    value={value}
+                    defaultValue={transformedValue}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
                 />
             )}
         </div>
