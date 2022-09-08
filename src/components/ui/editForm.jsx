@@ -18,21 +18,29 @@ const EditForm = () => {
     const [errors, setErrors] = useState({});
     const [professions, setProfessions] = useState();
     const [qualities, setQualities] = useState({});
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [isUserLoaded, setIsUserLoaded] = useState(false);
+    const [isProfessionsLoaded, setIsProfessionsLoaded] = useState(false);
+    const [isQualitiesLoaded, setIsQualitiesLoaded] = useState(false);
 
     const { userId } = useParams();
     const history = useHistory();
 
     useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfessions(data));
+        api.professions.fetchAll().then((data) => {
+            setProfessions(data);
+            setIsProfessionsLoaded(true);
+        });
     }, []);
     useEffect(() => {
-        api.qualities.fetchAll().then((data) => setQualities(data));
+        api.qualities.fetchAll().then((data) => {
+            setQualities(data);
+            setIsQualitiesLoaded(true);
+        });
     }, []);
     useEffect(() => {
         api.users.getById(userId).then((user) => {
             setData(user);
-            setIsLoaded(true);
+            setIsUserLoaded(true);
         });
     }, []);
 
@@ -82,7 +90,6 @@ const EditForm = () => {
             name: quality.label,
             color: quality.color
         }));
-        console.log(data);
         api.users.update(userId, data).then(() => history.goBack());
     };
 
@@ -90,7 +97,9 @@ const EditForm = () => {
         <div className="container mt-5">
             <div className="row">
                 <div className="col-md-6 offset-md-3 p-4 shadow">
-                    {isLoaded ? (
+                    {isUserLoaded &&
+                    isProfessionsLoaded &&
+                    isQualitiesLoaded ? (
                         <>
                             <h3 className="mb-4">Edit</h3>
                             <form onSubmit={handleSubmit}>
