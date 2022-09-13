@@ -19,7 +19,12 @@ const MultiSelectField = ({ options, label, onChange, name, value }) => {
     }));
 
     const handleChange = (e) => {
-        const data = { target: { name, value: e } };
+        const transformedE = e.map((val) => ({
+            _id: val.value,
+            name: val.label,
+            color: val.color
+        }));
+        const data = { target: { name, value: transformedE } };
         onChange(data);
     };
 

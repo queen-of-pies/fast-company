@@ -85,11 +85,6 @@ const EditForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        data.qualities = data.qualities.map((quality) => ({
-            _id: quality.value,
-            name: quality.label,
-            color: quality.color
-        }));
         api.users.update(userId, data).then(() => history.goBack());
     };
 
@@ -122,7 +117,7 @@ const EditForm = () => {
                                     options={professions}
                                     onChange={handleChange}
                                     name="profession"
-                                    value={data.profession._id}
+                                    value={data.profession}
                                     error={errors.profession}
                                 />
                                 <RadioField

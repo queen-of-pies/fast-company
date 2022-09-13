@@ -7,17 +7,22 @@ const SelectField = ({ label, options, onChange, name, value, error }) => {
             ? Object.keys(options).map((option) => options[option])
             : options;
 
+    const handleChange = ({ target }) => {
+        const item = optionsArray.find((option) => option._id === target.value);
+        onChange({ target: { name, value: item } });
+    };
+
     return (
         <div className="mb-4">
             <label htmlFor={name} className="form-label">
                 {label}
             </label>
             <select
-                onChange={onChange}
+                onChange={handleChange}
                 className={`form-select ${error && "is-invalid"}`}
                 id={name}
                 name={name}
-                value={value}
+                value={value._id}
             >
                 <option disabled value="">
                     Choose...
@@ -39,7 +44,7 @@ SelectField.propTypes = {
     options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    value: PropTypes.object.isRequired,
     error: PropTypes.string
 };
 
