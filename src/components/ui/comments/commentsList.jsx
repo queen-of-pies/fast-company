@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Comment from "./comment";
 import api from "../../../api";
 import PropTypes from "prop-types";
 
-const CommentsList = ({ userId }) => {
-    const [comments, setComments] = useState([]);
-
+const CommentsList = ({ fetchComments, comments }) => {
     useEffect(() => {
-        api.comments.fetchCommentsForUser(userId).then((comments) => {
-            setComments(comments);
-        });
+        fetchComments();
     }, []);
+
+    const handleRemove = (id) => {
+        api.comments.remove(id).then(() => fetchComments());
+    };
 
     if (!comments) {
         return <h1>Loading</h1>;
@@ -21,7 +21,11 @@ const CommentsList = ({ userId }) => {
                 <h2>Comments</h2>
                 <hr />
                 {comments.map((comment) => (
-                    <Comment key={comment._id} comment={comment} />
+                    <Comment
+                        key={comment._id}
+                        comment={comment}
+                        handleRemove={handleRemove}
+                    />
                 ))}
             </div>
         </div>
@@ -29,7 +33,8 @@ const CommentsList = ({ userId }) => {
 };
 
 CommentsList.propTypes = {
-    userId: PropTypes.string.isRequired
+    fetchComments: PropTypes.func.isRequired,
+    comments: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default CommentsList;

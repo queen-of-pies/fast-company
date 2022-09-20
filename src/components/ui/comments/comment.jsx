@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Avatar from "../../common/avatar";
 import PropTypes from "prop-types";
 import api from "../../../api";
+import { calculateCommentTime } from "../../../utils/calculateCommentTime";
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, handleRemove }) => {
     const [user, setUser] = useState();
 
     useEffect(() => {
@@ -13,8 +14,9 @@ const Comment = ({ comment }) => {
             });
         }
     }, []);
+
     if (!user) {
-        return <h1>Loading</h1>;
+        return <></>;
     }
 
     return (
@@ -28,11 +30,18 @@ const Comment = ({ comment }) => {
                                 <div className="d-flex justify-content-between align-items-center">
                                     <p className="mb-1">
                                         {user.name}
-                                        <span className="small">
-                                            5 минут назад
+                                        <span className="small p-2">
+                                            {calculateCommentTime(
+                                                comment.created_at
+                                            )}
                                         </span>
                                     </p>
-                                    <button className="btn btn-sm text-primary d-flex align-items-center">
+                                    <button
+                                        className="btn btn-sm text-primary d-flex align-items-center"
+                                        onClick={() =>
+                                            handleRemove(comment._id)
+                                        }
+                                    >
                                         <i className="bi bi-x-lg"></i>
                                     </button>
                                 </div>
@@ -47,7 +56,8 @@ const Comment = ({ comment }) => {
 };
 
 Comment.propTypes = {
-    comment: PropTypes.object.isRequired
+    comment: PropTypes.object.isRequired,
+    handleRemove: PropTypes.func.isRequired
 };
 
 export default Comment;
