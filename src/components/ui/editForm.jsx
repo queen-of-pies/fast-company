@@ -89,68 +89,76 @@ const EditForm = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="row">
-                <div className="col-md-6 offset-md-3 p-4 shadow">
-                    {isUserLoaded &&
-                    isProfessionsLoaded &&
-                    isQualitiesLoaded ? (
-                        <>
-                            <h3 className="mb-4">Edit</h3>
-                            <form onSubmit={handleSubmit}>
-                                <TextField
-                                    label="Name"
-                                    onChange={handleChange}
-                                    name="name"
-                                    value={data.name}
-                                    error={errors.name}
-                                />
-                                <TextField
-                                    label="Email"
-                                    onChange={handleChange}
-                                    name="email"
-                                    value={data.email}
-                                    error={errors.email}
-                                />
-                                <SelectField
-                                    label={"Выберите профессию"}
-                                    options={professions}
-                                    onChange={handleChange}
-                                    name="profession"
-                                    value={data.profession}
-                                    error={errors.profession}
-                                />
-                                <RadioField
-                                    label="Sex"
-                                    options={[
-                                        { name: "Male", value: "male" },
-                                        { name: "Female", value: "female" }
-                                    ]}
-                                    onChange={handleChange}
-                                    name="sex"
-                                    value={data.sex}
-                                />
-                                <MultiSelectField
-                                    label="Выберите качества"
-                                    options={qualities}
-                                    onChange={handleChange}
-                                    name="qualities"
-                                    value={data.qualities}
-                                />
-                                <button
-                                    className="btn btn-primary w-100 mx-auto"
-                                    disabled={!isValid}
-                                >
-                                    Submit
-                                </button>
-                            </form>
-                        </>
-                    ) : (
-                        <h1>Loading...</h1>
-                    )}
+        <>
+            <button
+                className="btn btn-primary mt-5 ms-lg-5"
+                onClick={() => history.goBack()}
+            >
+                Назад
+            </button>
+            <div className="container mt-5">
+                <div className="row">
+                    <div className="col-md-6 offset-md-3 p-4 shadow">
+                        {isUserLoaded &&
+                        isProfessionsLoaded &&
+                        isQualitiesLoaded ? (
+                            <>
+                                <h3 className="mb-4">Edit</h3>
+                                <form onSubmit={handleSubmit}>
+                                    <TextField
+                                        label="Name"
+                                        onChange={handleChange}
+                                        name="name"
+                                        value={data.name}
+                                        error={errors.name}
+                                    />
+                                    <TextField
+                                        label="Email"
+                                        onChange={handleChange}
+                                        name="email"
+                                        value={data.email}
+                                        error={errors.email}
+                                    />
+                                    <SelectField
+                                        label={"Выберите профессию"}
+                                        options={professions}
+                                        onChange={handleChange}
+                                        name="profession"
+                                        value={data.profession}
+                                        error={errors.profession}
+                                    />
+                                    <RadioField
+                                        label="Sex"
+                                        options={[
+                                            { name: "Male", value: "male" },
+                                            { name: "Female", value: "female" }
+                                        ]}
+                                        onChange={handleChange}
+                                        name="sex"
+                                        value={data.sex}
+                                    />
+                                    <MultiSelectField
+                                        label="Выберите качества"
+                                        options={qualities}
+                                        onChange={handleChange}
+                                        name="qualities"
+                                        value={data.qualities}
+                                    />
+                                    <button
+                                        className="btn btn-primary w-100 mx-auto"
+                                        disabled={!isValid}
+                                    >
+                                        Submit
+                                    </button>
+                                </form>
+                            </>
+                        ) : (
+                            <h1>Loading...</h1>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

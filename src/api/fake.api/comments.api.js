@@ -14,6 +14,13 @@ const comments = [
         created_at: "1633573058520"
     },
     {
+        _id: "67rdca3eeb7f6fgdaso",
+        pageId: "67rdca3eeb7f6fgeed471815",
+        userId: "67rdca3eeb7f6fgeed471815",
+        content: "Lorem ipsum dolor and etc",
+        created_at: "1434573058520"
+    },
+    {
         _id: "67rdca3eeb7f6fgdaasd",
         pageId: "67rdca3eeb7f6fgeed471817",
         userId: "67rdca3eeb7f6fgeed471815",
