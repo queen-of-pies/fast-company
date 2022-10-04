@@ -10,21 +10,30 @@ import Users from "../layouts/users";
 import EditForm from "./ui/editForm";
 import { UsersProvider } from "../hooks/useUsers";
 import { ToastContainer } from "react-toastify";
+import { ProfessionsProvider } from "../hooks/useProfessions";
+import { QualitiesProvider } from "../hooks/useQualities";
 
 const App = () => {
     return (
         <>
             <NavBar />
-            <Switch>
-                <Route exact path="/" component={Main} />
-                <Route path="/login/:type?" component={Login} />
-                <UsersProvider>
-                    <Route path="/users/:userId/edit" component={EditForm} />
-                    <Route path="/users/:userId?" component={Users} />
-                </UsersProvider>
-                <Route path="/404" component={NotFound} />
-                <Redirect to="/404" />
-            </Switch>
+            <ProfessionsProvider>
+                <QualitiesProvider>
+                    <Switch>
+                        <Route exact path="/" component={Main} />
+                        <Route path="/login/:type?" component={Login} />
+                        <UsersProvider>
+                            <Route
+                                path="/users/:userId/edit"
+                                component={EditForm}
+                            />
+                            <Route path="/users/:userId?" component={Users} />
+                        </UsersProvider>
+                        <Route path="/404" component={NotFound} />
+                        <Redirect to="/404" />
+                    </Switch>
+                </QualitiesProvider>
+            </ProfessionsProvider>
             <ToastContainer />
         </>
     );

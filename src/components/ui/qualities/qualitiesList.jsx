@@ -1,12 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useQualities } from "../../../hooks/useQualities";
 
 const QualitiesList = ({ qualities }) => {
-    return qualities.map((qual) => (
-        <span key={qual._id} className={`badge bg-${qual.color} m-1`}>
-            {qual.name}
-        </span>
-    ));
+    const { isLoading, getQuality } = useQualities();
+    return !isLoading ? (
+        qualities.map((qual) => {
+            const q = getQuality(qual);
+            return (
+                <span key={q._id} className={`badge bg-${q.color} m-1`}>
+                    {q.name}
+                </span>
+            );
+        })
+    ) : (
+        <h1>Loading...</h1>
+    );
 };
 
 QualitiesList.propTypes = {
