@@ -6,6 +6,7 @@ import api from "../../../api";
 import SearchStatus from "../../ui/searchStatus";
 import UsersTable from "../../ui/usersTable";
 import _ from "lodash";
+import { useUsers } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -24,27 +25,20 @@ const UsersListPage = () => {
 
     const pageSize = 8;
 
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        api.users.fetchAll().then((data) => {
-            const users = data.map((item) => ({ ...item, favorites: false }));
-            setUsers(users);
-        });
-    }, []);
+    const { users, deleteUser } = useUsers();
 
     const handleDelete = (id) => {
-        setUsers((prevState) => prevState.filter((user) => user._id !== id));
+        deleteUser(id);
     };
 
     const handleChange = (id) => {
-        const newState = users.map((user) => {
-            if (user._id === id) {
-                user.favorites = !user.favorites;
-            }
-            return user;
-        });
-        setUsers(newState);
+        // const newState = users.map((user) => {
+        //     if (user._id === id) {
+        //         user.favorites = !user.favorites;
+        //     }
+        //     return user;
+        // });
+        // setUsers(newState);
     };
 
     const handleProfessionSelect = (item) => {
@@ -66,7 +60,7 @@ const UsersListPage = () => {
         setSearch(value);
     };
 
-    if (users.length) {
+    if (users && users.length) {
         const filteredUsers = selectedProf
             ? users.filter((user) => user.profession._id === selectedProf._id)
             : search

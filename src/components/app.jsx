@@ -8,6 +8,8 @@ import Login from "../layouts/login";
 import NotFound from "../layouts/notFound";
 import Users from "../layouts/users";
 import EditForm from "./ui/editForm";
+import { UsersProvider } from "../hooks/useUsers";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
     return (
@@ -16,11 +18,14 @@ const App = () => {
             <Switch>
                 <Route exact path="/" component={Main} />
                 <Route path="/login/:type?" component={Login} />
-                <Route path="/users/:userId/edit" component={EditForm} />
-                <Route path="/users/:userId?" component={Users} />
+                <UsersProvider>
+                    <Route path="/users/:userId/edit" component={EditForm} />
+                    <Route path="/users/:userId?" component={Users} />
+                </UsersProvider>
                 <Route path="/404" component={NotFound} />
                 <Redirect to="/404" />
             </Switch>
+            <ToastContainer />
         </>
     );
 };
