@@ -23,6 +23,7 @@ const SelectField = ({ label, options, onChange, name, value, error }) => {
                 id={name}
                 name={name}
                 value={value._id}
+                defaultValue=""
             >
                 <option disabled value="">
                     Choose...
@@ -44,7 +45,7 @@ SelectField.propTypes = {
     options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.object.isRequired,
+    value: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired,
     error: PropTypes.string
 };
 
