@@ -10,7 +10,7 @@ const Bookmark = ({ favorites, onClick }) => {
 };
 
 Bookmark.propTypes = {
-    favorites: PropTypes.bool.isRequired,
+    favorites: PropTypes.bool,
     onClick: PropTypes.func.isRequired
 };
 

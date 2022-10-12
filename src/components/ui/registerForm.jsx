@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import validator from "../../utils/validator";
 import TextField from "../common/form/textField";
-import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckboxField from "../common/form/checkboxField";
+import { useProfessions } from "../../hooks/useProfessions";
+import { useQualities } from "../../hooks/useQualities";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -17,15 +18,12 @@ const RegisterForm = () => {
         license: false
     });
     const [errors, setErrors] = useState({});
-    const [professions, setProfessions] = useState();
-    const [qualities, setQualities] = useState({});
-
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfessions(data));
-    }, []);
-    useEffect(() => {
-        api.qualities.fetchAll().then((data) => setQualities(data));
-    }, []);
+    const { professions } = useProfessions();
+    const { qualities } = useQualities();
+    const qualitiesList = qualities.map((qual) => ({
+        label: qual.name,
+        value: qual._id
+    }));
 
     useEffect(() => {
         validate();
@@ -78,7 +76,12 @@ const RegisterForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(data);
+        const newData = {
+            ...data,
+            qualities: data.qualities.map((q) => q._id),
+            profession: data.profession._id
+        };
+        console.log(newData);
     };
 
     return (
@@ -120,7 +123,7 @@ const RegisterForm = () => {
                 />
                 <MultiSelectField
                     label="Выберите качества"
-                    options={qualities}
+                    options={qualitiesList}
                     onChange={handleChange}
                     name="qualities"
                     value={data.qualities}
