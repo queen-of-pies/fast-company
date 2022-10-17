@@ -22,6 +22,10 @@ const usersService = {
     fetchAll: async () => {
         const { data } = await httpService.get(url);
         return data.content;
+    },
+    create: async (payload) => {
+        const { data } = await httpService.put(url + payload._id, payload);
+        return data.content;
     }
 };
 

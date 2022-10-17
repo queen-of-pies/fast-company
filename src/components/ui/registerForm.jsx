@@ -7,6 +7,8 @@ import MultiSelectField from "../common/form/multiSelectField";
 import CheckboxField from "../common/form/checkboxField";
 import { useProfessions } from "../../hooks/useProfessions";
 import { useQualities } from "../../hooks/useQualities";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -24,6 +26,9 @@ const RegisterForm = () => {
         label: qual.name,
         value: qual._id
     }));
+    const history = useHistory();
+
+    const { signUp } = useAuth();
 
     useEffect(() => {
         validate();
@@ -72,7 +77,7 @@ const RegisterForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
@@ -81,7 +86,12 @@ const RegisterForm = () => {
             qualities: data.qualities.map((q) => q._id),
             profession: data.profession._id
         };
-        console.log(newData);
+        try {
+            await signUp(newData);
+            history.push("/");
+        } catch (error) {
+            setErrors(error);
+        }
     };
 
     return (
