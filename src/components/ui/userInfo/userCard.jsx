@@ -1,10 +1,11 @@
 import React from "react";
-import Avatar from "../../common/avatar";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UserCard = ({ user }) => {
     const history = useHistory();
+    const { currentUser } = useAuth();
 
     const handleMoveToEdit = () => {
         history.push(`/users/${user._id}/edit`);
@@ -12,15 +13,21 @@ const UserCard = ({ user }) => {
     return (
         <div className="card mb-3">
             <div className="card-body">
-                <button
-                    className="position-absolute top-0 end-0 btn btn-light btn-sm"
-                    onClick={handleMoveToEdit}
-                >
-                    <i className="bi bi-gear"></i>
-                </button>
+                {user._id === currentUser._id && (
+                    <button
+                        className="position-absolute top-0 end-0 btn btn-light btn-sm"
+                        onClick={handleMoveToEdit}
+                    >
+                        <i className="bi bi-gear"></i>
+                    </button>
+                )}
                 <div className=" d-flex flex-column align-items-center text-center position-relative">
                     <div className="mt-3">
-                        <Avatar size="big" />
+                        <img
+                            src={user.img}
+                            alt=""
+                            className="responsive-img rounded-circle"
+                        />
                         <h4>{user.name}</h4>
                         <p className="text-secondary mb-1">
                             {user.profession.name}

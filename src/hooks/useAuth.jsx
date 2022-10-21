@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import localStorageService, {
     setTokens
 } from "../services/localStorage.service";
+import { useHistory } from "react-router-dom";
 
 const AuthContext = React.createContext();
 export const httpAuth = axios.create({
@@ -18,8 +19,9 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState({});
-    console.log(currentUser);
+    const [currentUser, setCurrentUser] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    const history = useHistory();
 
     function randomInt(max, min) {
         return Math.floor(Math.random() * (max - min + 1) + min);
@@ -38,6 +40,11 @@ export const AuthProvider = ({ children }) => {
                 email,
                 rate: randomInt(1, 5),
                 completedMeetings: randomInt(0, 200),
+                img: `https://avatars.dicebear.com/api/avataaars/${(
+                    Math.random() + 1
+                )
+                    .toString(36)
+                    .substring(7)}.svg`,
                 ...rest
             });
         } catch (error) {
@@ -65,25 +72,24 @@ export const AuthProvider = ({ children }) => {
                 }
             );
             setTokens(data);
-            getUserData();
+            await getUserData();
         } catch (error) {
             const { code, message } = error.response.data.error;
-            toast.error(message);
             if (code === 400) {
-                if (message === "INVALID_PASSWORD") {
-                    const errorObj = {
-                        password: "Неверно введен пароль"
-                    };
-                    throw errorObj;
-                }
-                if (message === "EMAIL_NOT_FOUND") {
-                    const errorObj = {
-                        email: "Неверно введен email"
-                    };
-                    throw errorObj;
+                if (
+                    message === "INVALID_PASSWORD" ||
+                    message === "EMAIL_NOT_FOUND"
+                ) {
+                    toast.error("Неверно введен пароль или email");
                 }
             }
         }
+    }
+
+    function logOut() {
+        localStorageService.removeAuthData();
+        setCurrentUser(null);
+        history.push("/");
     }
 
     async function createUser(data) {
@@ -100,18 +106,22 @@ export const AuthProvider = ({ children }) => {
             setCurrentUser(content);
         } catch (error) {
             toast.error(error.response.data.message);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     useEffect(() => {
         if (localStorageService.getAccessToken()) {
             getUserData();
+        } else {
+            setIsLoading(false);
         }
     }, []);
 
     return (
-        <AuthContext.Provider value={{ signUp, signIn, currentUser }}>
-            {children}
+        <AuthContext.Provider value={{ signUp, signIn, currentUser, logOut }}>
+            {!isLoading ? children : <h1>Loading...</h1>}
         </AuthContext.Provider>
     );
 };

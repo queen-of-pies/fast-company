@@ -6,13 +6,7 @@ import Table from "../common/table";
 import { Link } from "react-router-dom";
 import Profession from "./profession";
 
-const UsersTable = ({
-    userCrop,
-    onSort,
-    selectedSort,
-    onFavoritesChange,
-    onDelete
-}) => {
+const UsersTable = ({ userCrop, onSort, selectedSort, onFavoritesChange }) => {
     const columns = {
         name: {
             path: "name",
@@ -43,16 +37,6 @@ const UsersTable = ({
                     onClick={() => onFavoritesChange(user._id)}
                 />
             )
-        },
-        delete: {
-            component: (user) => (
-                <button
-                    className="btn btn-danger"
-                    onClick={() => onDelete(user._id)}
-                >
-                    delete
-                </button>
-            )
         }
     };
     return (
@@ -69,8 +53,7 @@ UsersTable.propTypes = {
     userCrop: PropTypes.arrayOf(PropTypes.object).isRequired,
     onSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired,
-    onFavoritesChange: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired
+    onFavoritesChange: PropTypes.func.isRequired
 };
 
 export default UsersTable;
