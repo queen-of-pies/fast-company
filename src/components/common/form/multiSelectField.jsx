@@ -3,20 +3,22 @@ import Select from "react-select";
 import PropTypes, { oneOfType } from "prop-types";
 
 const MultiSelectField = ({ options, label, onChange, name, value }) => {
-    const optionsArray =
-        !Array.isArray(options) && typeof options === "object"
-            ? Object.keys(options).map((option) => ({
-                  value: options[option]._id,
-                  label: options[option].name,
-                  color: options[option].color
-              }))
-            : options;
-    console.log(value);
-    const transformedValue = value.map((val) => ({
-        value: val._id,
-        label: val.name,
-        color: val.color
+    const optionsArray = options.map((option) => ({
+        value: option._id,
+        label: option.name,
+        color: option.color
     }));
+    const transformedValue = value.map((val) => {
+        let option = val;
+        if (typeof val === "string") {
+            option = options.find((opt) => opt._id === val);
+        }
+        return {
+            value: option._id,
+            label: option.name,
+            color: option.color
+        };
+    });
 
     const handleChange = (e) => {
         const transformedE = e.map((val) => ({

@@ -9,6 +9,7 @@ const SelectField = ({ label, options, onChange, name, value, error }) => {
 
     const handleChange = ({ target }) => {
         const item = optionsArray.find((option) => option._id === target.value);
+        console.log("select handle change", item);
         onChange({ target: { name, value: item } });
     };
 
@@ -22,8 +23,7 @@ const SelectField = ({ label, options, onChange, name, value, error }) => {
                 className={`form-select ${error && "is-invalid"}`}
                 id={name}
                 name={name}
-                value={value._id}
-                defaultValue=""
+                defaultValue={typeof value === "object" ? value._id : value}
             >
                 <option disabled value="">
                     Choose...
