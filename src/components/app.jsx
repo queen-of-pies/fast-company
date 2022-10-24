@@ -8,32 +8,39 @@ import Login from "../layouts/login";
 import NotFound from "../layouts/notFound";
 import Users from "../layouts/users";
 import EditForm from "./ui/editForm";
-import { UsersProvider } from "../hooks/useUsers";
 import { ToastContainer } from "react-toastify";
 import { ProfessionsProvider } from "../hooks/useProfessions";
 import { QualitiesProvider } from "../hooks/useQualities";
+import { AuthProvider } from "../hooks/useAuth";
+import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "./common/protectedRoute";
+import LogOut from "../layouts/logOut";
 
 const App = () => {
     return (
         <>
-            <NavBar />
-            <ProfessionsProvider>
-                <QualitiesProvider>
-                    <Switch>
-                        <Route exact path="/" component={Main} />
-                        <Route path="/login/:type?" component={Login} />
-                        <UsersProvider>
+            <AuthProvider>
+                <NavBar />
+                <ProfessionsProvider>
+                    <QualitiesProvider>
+                        <Switch>
                             <Route
                                 path="/users/:userId/edit"
                                 component={EditForm}
                             />
-                            <Route path="/users/:userId?" component={Users} />
-                        </UsersProvider>
-                        <Route path="/404" component={NotFound} />
-                        <Redirect to="/404" />
-                    </Switch>
-                </QualitiesProvider>
-            </ProfessionsProvider>
+                            <ProtectedRoute
+                                path="/users/:userId?"
+                                component={Users}
+                            />
+                            <Route exact path="/" component={Main} />
+                            <Route path="/login/:type?" component={Login} />
+                            <Route path="/logout" component={LogOut} />
+                            <Route path="/404" component={NotFound} />
+                            <Redirect to="/404" />
+                        </Switch>
+                    </QualitiesProvider>
+                </ProfessionsProvider>
+            </AuthProvider>
             <ToastContainer />
         </>
     );

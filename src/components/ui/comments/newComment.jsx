@@ -1,33 +1,17 @@
 import React, { useEffect, useState } from "react";
-import SelectField from "../../common/form/selectField";
-import api from "../../../api";
-import PropTypes from "prop-types";
 import validator from "../../../utils/validator";
+import { useComments } from "../../../hooks/useComments";
 
-const NewComment = ({ pageId, fetchComments }) => {
-    const [users, setUsers] = useState([]);
-    const defaultNewComment = { user: { _id: "" }, content: "" };
-    const [newComment, setNewComment] = useState(defaultNewComment);
+const NewComment = () => {
+    const [newComment, setNewComment] = useState({});
     const [errors, setErrors] = useState({});
-
-    useEffect(() => {
-        api.users.fetchAll().then((data) => {
-            const users = data.map((item) => ({
-                _id: item._id,
-                name: item.name
-            }));
-            setUsers(users);
-        });
-    }, []);
+    const { createComment } = useComments();
 
     useEffect(() => {
         validate();
     }, [newComment]);
 
     const validateConfig = {
-        user: {
-            isRequired: { message: `Необходимо выбрать пользователя.` }
-        },
         content: {
             isRequired: { message: `Комментарий не должен быть пустым.` }
         }
@@ -51,16 +35,8 @@ const NewComment = ({ pageId, fetchComments }) => {
     const handleSubmit = () => {
         const isValid = validate();
         if (!isValid) return;
-        api.comments
-            .add({
-                pageId,
-                userId: newComment.user._id,
-                content: newComment.content
-            })
-            .then(() => {
-                fetchComments();
-                setNewComment(defaultNewComment);
-            });
+        createComment(newComment);
+        setNewComment({});
     };
 
     return (
@@ -68,15 +44,6 @@ const NewComment = ({ pageId, fetchComments }) => {
             <div className="card-body">
                 <div>
                     <h2>New comment</h2>
-                    <div className="mb-4">
-                        <SelectField
-                            options={users}
-                            onChange={handleChange}
-                            value={newComment.user}
-                            name="user"
-                            error={errors.user}
-                        />
-                    </div>
                     <div className="mb-4">
                         <label
                             htmlFor="exampleFormControlTextarea1"
@@ -90,7 +57,7 @@ const NewComment = ({ pageId, fetchComments }) => {
                             }`}
                             id="exampleFormControlTextarea1"
                             rows="3"
-                            value={newComment.content}
+                            value={newComment.content || ""}
                             onChange={handleChange}
                             name="content"
                         />
@@ -111,11 +78,6 @@ const NewComment = ({ pageId, fetchComments }) => {
             </div>
         </div>
     );
-};
-
-NewComment.propTypes = {
-    pageId: PropTypes.string.isRequired,
-    fetchComments: PropTypes.func.isRequired
 };
 
 export default NewComment;

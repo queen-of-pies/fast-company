@@ -7,10 +7,13 @@ import MultiSelectField from "../common/form/multiSelectField";
 import CheckboxField from "../common/form/checkboxField";
 import { useProfessions } from "../../hooks/useProfessions";
 import { useQualities } from "../../hooks/useQualities";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
         email: "",
+        name: "",
         password: "",
         profession: "",
         sex: "male",
@@ -24,6 +27,9 @@ const RegisterForm = () => {
         label: qual.name,
         value: qual._id
     }));
+    const history = useHistory();
+
+    const { signUp } = useAuth();
 
     useEffect(() => {
         validate();
@@ -33,6 +39,13 @@ const RegisterForm = () => {
         email: {
             isRequired: { message: `Поле email обязательно к заполнению.` },
             isEmail: { message: "Введеный email некорректный" }
+        },
+        name: {
+            isRequired: { message: `Поле имя обязательно к заполнению.` },
+            min: {
+                message: `Поле имя должно содержать не менее 3 символов.`,
+                value: 3
+            }
         },
         password: {
             isRequired: { message: `Поле password обязательно к заполнению.` },
@@ -72,7 +85,7 @@ const RegisterForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
@@ -81,7 +94,12 @@ const RegisterForm = () => {
             qualities: data.qualities.map((q) => q._id),
             profession: data.profession._id
         };
-        console.log(newData);
+        try {
+            await signUp(newData);
+            history.push("/");
+        } catch (error) {
+            setErrors(error);
+        }
     };
 
     return (
@@ -94,6 +112,13 @@ const RegisterForm = () => {
                     name="email"
                     value={data.email}
                     error={errors.email}
+                />
+                <TextField
+                    label="Name"
+                    onChange={handleChange}
+                    name="name"
+                    value={data.name}
+                    error={errors.name}
                 />
                 <TextField
                     label="Password"

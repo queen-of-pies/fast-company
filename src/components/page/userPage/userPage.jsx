@@ -1,28 +1,17 @@
-import React, { useEffect, useState } from "react";
-import api from "../../../api";
+import React from "react";
 import UserCard from "../../ui/userInfo/userCard";
 import PropTypes from "prop-types";
 import QualitiesCard from "../../ui/userInfo/qualitiesCard";
 import MeetingsCard from "../../ui/userInfo/meetingsCard";
 import CommentsList from "../../ui/comments/commentsList";
 import NewComment from "../../ui/comments/newComment";
+import { useUsers } from "../../../hooks/useUsers";
+import { useComments } from "../../../hooks/useComments";
 
 const UserPage = ({ userId }) => {
-    const [user, setUser] = useState();
-    const [comments, setComments] = useState([]);
-
-    const fetchComments = () => {
-        api.comments.fetchCommentsForUser(userId).then((comments) => {
-            comments.sort((a, b) => +b.created_at - +a.created_at);
-            setComments(comments);
-        });
-    };
-
-    useEffect(() => {
-        api.users.getById(userId).then((user) => {
-            setUser(user);
-        });
-    }, []);
+    const { comments } = useComments();
+    const { getUserById } = useUsers();
+    const user = getUserById(userId);
 
     if (!user) {
         return <h1>Loading</h1>;
@@ -36,11 +25,8 @@ const UserPage = ({ userId }) => {
                     <MeetingsCard meetingsCount={user.completedMeetings} />
                 </div>
                 <div className="col-md-8">
-                    <NewComment fetchComments={fetchComments} pageId={userId} />
-                    <CommentsList
-                        comments={comments}
-                        fetchComments={fetchComments}
-                    />
+                    <NewComment />
+                    <CommentsList comments={comments} />
                 </div>
             </div>
         </div>

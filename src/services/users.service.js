@@ -1,4 +1,5 @@
 import httpService from "./http.service";
+import localStorageService from "./localStorage.service";
 
 const url = `user/`;
 
@@ -22,6 +23,16 @@ const usersService = {
     fetchAll: async () => {
         const { data } = await httpService.get(url);
         return data.content;
+    },
+    create: async (payload) => {
+        const { data } = await httpService.put(url + payload._id, payload);
+        return data.content;
+    },
+    getCurrentUser: async () => {
+        const { data } = await httpService.get(
+            url + localStorageService.getUserId()
+        );
+        return data;
     }
 };
 

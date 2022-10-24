@@ -7,7 +7,6 @@ const QualitiesList = ({ qualities }) => {
     return !isLoading ? (
         qualities.map((qual) => {
             const q = getQuality(qual);
-            console.log(q);
             return (
                 <span key={q._id} className={`badge bg-${q.color} m-1`}>
                     {q.name}
@@ -15,7 +14,7 @@ const QualitiesList = ({ qualities }) => {
             );
         })
     ) : (
-        <h1>Loading...</h1>
+        <span>Loading...</span>
     );
 };
 

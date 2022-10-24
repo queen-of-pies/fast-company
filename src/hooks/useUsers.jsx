@@ -27,6 +27,10 @@ export const UsersProvider = ({ children }) => {
         }
     };
 
+    function getUserById(userId) {
+        return users.find((user) => user._id === userId);
+    }
+
     const deleteUser = async (id) => {
         try {
             const content = await usersService.delete(id);
@@ -41,7 +45,7 @@ export const UsersProvider = ({ children }) => {
     };
 
     return (
-        <UsersContext.Provider value={{ users, deleteUser }}>
+        <UsersContext.Provider value={{ users, deleteUser, getUserById }}>
             {!isLoading ? children : <h1>Loading...</h1>}
         </UsersContext.Provider>
     );
