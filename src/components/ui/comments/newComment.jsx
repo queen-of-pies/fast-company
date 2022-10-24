@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import validator from "../../../utils/validator";
 import { useComments } from "../../../hooks/useComments";
 
-const NewComment = ({ pageId, fetchComments }) => {
+const NewComment = () => {
     const [newComment, setNewComment] = useState({});
     const [errors, setErrors] = useState({});
     const { createComment } = useComments();
@@ -38,16 +37,6 @@ const NewComment = ({ pageId, fetchComments }) => {
         if (!isValid) return;
         createComment(newComment);
         setNewComment({});
-        // api.comments
-        //     .add({
-        //         pageId,
-        //         userId: newComment.user._id,
-        //         content: newComment.content
-        //     })
-        //     .then(() => {
-        //         fetchComments();
-        //         setNewComment(defaultNewComment);
-        //     });
     };
 
     return (
@@ -89,11 +78,6 @@ const NewComment = ({ pageId, fetchComments }) => {
             </div>
         </div>
     );
-};
-
-NewComment.propTypes = {
-    pageId: PropTypes.string.isRequired,
-    fetchComments: PropTypes.func.isRequired
 };
 
 export default NewComment;

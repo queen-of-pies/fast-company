@@ -14,7 +14,7 @@ const QualitiesList = ({ qualities }) => {
             );
         })
     ) : (
-        <p>Loading...</p>
+        <span>Loading...</span>
     );
 };
 

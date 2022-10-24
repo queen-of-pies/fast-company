@@ -20,7 +20,11 @@ export const CommentsProvider = ({ children }) => {
 
     useEffect(() => {
         getComments();
-    }, []);
+    }, [userId]);
+
+    function sortComments(comments) {
+        return comments.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+    }
 
     async function createComment(data) {
         const comment = {
@@ -32,7 +36,7 @@ export const CommentsProvider = ({ children }) => {
         };
         try {
             const content = await commentService.createComment(comment);
-            console.log(content);
+            setComments((prevState) => sortComments([...prevState, content]));
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -41,8 +45,7 @@ export const CommentsProvider = ({ children }) => {
     async function getComments() {
         try {
             const content = await commentService.getComments(userId);
-            console.log(content);
-            setComments(content);
+            setComments(sortComments(content));
         } catch (error) {
             toast.error(error.response.data.message);
         } finally {
@@ -50,9 +53,26 @@ export const CommentsProvider = ({ children }) => {
         }
     }
 
+    async function deleteComment(id) {
+        try {
+            await commentService.deleteComment(id);
+            setComments((prevState) =>
+                prevState.filter((comment) => comment._id !== id)
+            );
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    }
+
     return (
         <CommentsContext.Provider
-            value={{ comments, createComment, isLoading, getComments }}
+            value={{
+                comments,
+                createComment,
+                isLoading,
+                getComments,
+                deleteComment
+            }}
         >
             {children}
         </CommentsContext.Provider>

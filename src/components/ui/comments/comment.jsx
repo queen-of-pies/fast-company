@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Avatar from "../../common/avatar";
+import React from "react";
 import PropTypes from "prop-types";
-import api from "../../../api";
 import { calculateCommentTime } from "../../../utils/calculateCommentTime";
+import { useComments } from "../../../hooks/useComments";
+import { useUsers } from "../../../hooks/useUsers";
+import { useAuth } from "../../../hooks/useAuth";
 
-const Comment = ({ comment, handleRemove }) => {
-    const [user, setUser] = useState();
-
-    useEffect(() => {
-        if (comment) {
-            api.users.getById(comment.userId).then((user) => {
-                setUser(user);
-            });
-        }
-    }, []);
+const Comment = ({ comment }) => {
+    const { deleteComment } = useComments();
+    const { getUserById } = useUsers();
+    const user = getUserById(comment.userId);
+    const { currentUser } = useAuth();
 
     if (!user) {
         return <></>;
@@ -24,7 +20,12 @@ const Comment = ({ comment, handleRemove }) => {
             <div className="row">
                 <div className="col">
                     <div className="d-flex flex-start">
-                        <Avatar />
+                        <img
+                            src={user.img}
+                            alt="comment-avatar"
+                            height="40"
+                            className="img-responsive rounded-circle mx-2"
+                        />
                         <div className="flex-grow-1 flex-shrink-1">
                             <div className="mb-4">
                                 <div className="d-flex justify-content-between align-items-center">
@@ -36,14 +37,16 @@ const Comment = ({ comment, handleRemove }) => {
                                             )}
                                         </span>
                                     </p>
-                                    <button
-                                        className="btn btn-sm text-primary d-flex align-items-center"
-                                        onClick={() =>
-                                            handleRemove(comment._id)
-                                        }
-                                    >
-                                        <i className="bi bi-x-lg"></i>
-                                    </button>
+                                    {currentUser._id === user._id && (
+                                        <button
+                                            className="btn btn-sm text-primary d-flex align-items-center"
+                                            onClick={() =>
+                                                deleteComment(comment._id)
+                                            }
+                                        >
+                                            <i className="bi bi-x-lg"></i>
+                                        </button>
+                                    )}
                                 </div>
                                 <p className="small mb-0">{comment.content}</p>
                             </div>
@@ -57,7 +60,7 @@ const Comment = ({ comment, handleRemove }) => {
 
 Comment.propTypes = {
     comment: PropTypes.object.isRequired,
-    handleRemove: PropTypes.func.isRequired
+    user: PropTypes.object
 };
 
 export default Comment;

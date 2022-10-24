@@ -1,17 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Comment from "./comment";
-import api from "../../../api";
 import PropTypes from "prop-types";
 
-const CommentsList = ({ fetchComments, comments }) => {
-    useEffect(() => {
-        fetchComments();
-    }, []);
-
-    const handleRemove = (id) => {
-        api.comments.remove(id).then(() => fetchComments());
-    };
-
+const CommentsList = ({ comments }) => {
     if (!comments) {
         return <h1>Loading</h1>;
     }
@@ -21,11 +12,7 @@ const CommentsList = ({ fetchComments, comments }) => {
                 <h2>Comments</h2>
                 <hr />
                 {comments.map((comment) => (
-                    <Comment
-                        key={comment._id}
-                        comment={comment}
-                        handleRemove={handleRemove}
-                    />
+                    <Comment key={comment._id} comment={comment} />
                 ))}
             </div>
         </div>
@@ -33,7 +20,6 @@ const CommentsList = ({ fetchComments, comments }) => {
 };
 
 CommentsList.propTypes = {
-    fetchComments: PropTypes.func.isRequired,
     comments: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 

@@ -12,6 +12,10 @@ const commentService = {
             params: { orderBy: '"pageId"', equalTo: `"${pageId}"` }
         });
         return data.content;
+    },
+    deleteComment: async (id) => {
+        const { data } = await httpService.delete(url + id);
+        return data.content;
     }
 };
 

@@ -11,7 +11,7 @@ const MultiSelectField = ({ options, label, onChange, name, value }) => {
                   color: options[option].color
               }))
             : options;
-
+    console.log(value);
     const transformedValue = value.map((val) => ({
         value: val._id,
         label: val.name,

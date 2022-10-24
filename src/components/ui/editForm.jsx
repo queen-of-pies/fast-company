@@ -6,6 +6,9 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import { useHistory, useParams } from "react-router-dom";
+import { useProfessions } from "../../hooks/useProfessions";
+import { useQualities } from "../../hooks/useQualities";
+import { useAuth } from "../../hooks/useAuth";
 
 const EditForm = () => {
     const [data, setData] = useState({
@@ -16,33 +19,27 @@ const EditForm = () => {
         qualities: []
     });
     const [errors, setErrors] = useState({});
-    const [professions, setProfessions] = useState();
-    const [qualities, setQualities] = useState({});
-    const [isUserLoaded, setIsUserLoaded] = useState(false);
-    const [isProfessionsLoaded, setIsProfessionsLoaded] = useState(false);
-    const [isQualitiesLoaded, setIsQualitiesLoaded] = useState(false);
+    const { professions, isLoading: isProfessionsLoaded } = useProfessions();
+
+    const { qualities, isLoading: isQualitiesLoaded } = useQualities();
+    const { isLoading: isUserLoaded } = useAuth();
 
     const { userId } = useParams();
     const history = useHistory();
+    const { currentUser } = useAuth();
 
     useEffect(() => {
-        api.professions.fetchAll().then((data) => {
-            setProfessions(data);
-            setIsProfessionsLoaded(true);
-        });
+        setData(currentUser);
     }, []);
+
     useEffect(() => {
-        api.qualities.fetchAll().then((data) => {
-            setQualities(data);
-            setIsQualitiesLoaded(true);
-        });
-    }, []);
-    useEffect(() => {
-        api.users.getById(userId).then((user) => {
-            setData(user);
-            setIsUserLoaded(true);
-        });
-    }, []);
+        const newQualities = data.qualities.map((qual) => ({
+            _id: qual,
+            name: qualities[qual].name,
+            color: qualities[qual].color
+        }));
+        setData((prevState) => ({ ...prevState, qualities: newQualities }));
+    }, [qualities, currentUser]);
 
     useEffect(() => {
         validate();
@@ -99,9 +96,9 @@ const EditForm = () => {
             <div className="container mt-5">
                 <div className="row">
                     <div className="col-md-6 offset-md-3 p-4 shadow">
-                        {isUserLoaded &&
-                        isProfessionsLoaded &&
-                        isQualitiesLoaded ? (
+                        {!isUserLoaded &&
+                        !isProfessionsLoaded &&
+                        !isQualitiesLoaded ? (
                             <>
                                 <h3 className="mb-4">Edit</h3>
                                 <form onSubmit={handleSubmit}>
