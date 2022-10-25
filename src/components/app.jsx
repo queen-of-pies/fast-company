@@ -7,7 +7,6 @@ import Main from "../layouts/main";
 import Login from "../layouts/login";
 import NotFound from "../layouts/notFound";
 import Users from "../layouts/users";
-import EditForm from "./ui/editForm";
 import { ToastContainer } from "react-toastify";
 import { ProfessionsProvider } from "../hooks/useProfessions";
 import { QualitiesProvider } from "../hooks/useQualities";
@@ -24,12 +23,8 @@ const App = () => {
                 <ProfessionsProvider>
                     <QualitiesProvider>
                         <Switch>
-                            <Route
-                                path="/users/:userId/edit"
-                                component={EditForm}
-                            />
                             <ProtectedRoute
-                                path="/users/:userId?"
+                                path="/users/:userId?/:edit?"
                                 component={Users}
                             />
                             <Route exact path="/" component={Main} />

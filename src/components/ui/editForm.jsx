@@ -4,7 +4,7 @@ import TextField from "../common/form/textField";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useProfessions } from "../../hooks/useProfessions";
 import { useQualities } from "../../hooks/useQualities";
 import { useAuth } from "../../hooks/useAuth";
@@ -22,10 +22,16 @@ const EditForm = () => {
 
     const { qualities, isLoading: isQualitiesLoaded } = useQualities();
 
-    // const { currentUser, updateUser, isLoading: isUserLoaded } = useAuth();
     const { currentUser, updateUser } = useAuth();
 
     const history = useHistory();
+    const { userId } = useParams();
+
+    useEffect(() => {
+        if (userId !== currentUser._id) {
+            history.push(`/users/${currentUser._id}/edit`);
+        }
+    }, []);
 
     useEffect(() => {
         setData(currentUser);
