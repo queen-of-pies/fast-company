@@ -2,14 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import { useProfessions } from "../../../hooks/useProfessions";
 
 const UserCard = ({ user }) => {
     const history = useHistory();
     const { currentUser } = useAuth();
+    const { professions, isLoading } = useProfessions();
 
     const handleMoveToEdit = () => {
         history.push(`/users/${user._id}/edit`);
     };
+    if (isLoading) {
+        return "Loading";
+    }
+
+    const prof = professions.find((prof) => prof._id === user.profession);
     return (
         <div className="card mb-3">
             <div className="card-body">
@@ -29,9 +36,7 @@ const UserCard = ({ user }) => {
                             className="responsive-img rounded-circle"
                         />
                         <h4>{user.name}</h4>
-                        <p className="text-secondary mb-1">
-                            {user.profession.name}
-                        </p>
+                        <p className="text-secondary mb-1">{prof.name}</p>
                         <div className="text-muted">
                             <i
                                 className="bi bi-caret-down-fill text-primary"

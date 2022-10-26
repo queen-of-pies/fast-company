@@ -4,8 +4,8 @@ import localStorageService from "./localStorage.service";
 const url = `user/`;
 
 const usersService = {
-    update: async (id, content) => {
-        const { data } = await httpService.put(url + id, content);
+    update: async (payload) => {
+        const { data } = await httpService.put(url + payload._id, payload);
         return data.content;
     },
     get: async (id) => {

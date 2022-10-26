@@ -23,10 +23,10 @@ const RegisterForm = () => {
     const [errors, setErrors] = useState({});
     const { professions } = useProfessions();
     const { qualities } = useQualities();
-    const qualitiesList = qualities.map((qual) => ({
-        label: qual.name,
-        value: qual._id
-    }));
+    // const qualitiesList = qualities.map((qual) => ({
+    //     label: qual.name,
+    //     value: qual._id
+    // }));
     const history = useHistory();
 
     const { signUp } = useAuth();
@@ -148,7 +148,7 @@ const RegisterForm = () => {
                 />
                 <MultiSelectField
                     label="Выберите качества"
-                    options={qualitiesList}
+                    options={qualities}
                     onChange={handleChange}
                     name="qualities"
                     value={data.qualities}

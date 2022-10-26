@@ -99,6 +99,13 @@ export const AuthProvider = ({ children }) => {
             toast.error(error.response.data.message);
         }
     }
+    async function updateUser(data) {
+        try {
+            await usersService.update(data);
+        } catch (error) {
+            toast.error(error.response.data.message);
+        }
+    }
 
     async function getUserData() {
         try {
@@ -120,7 +127,9 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ signUp, signIn, currentUser, logOut }}>
+        <AuthContext.Provider
+            value={{ signUp, signIn, currentUser, logOut, updateUser }}
+        >
             {!isLoading ? children : <h1>Loading...</h1>}
         </AuthContext.Provider>
     );
