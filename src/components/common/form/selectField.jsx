@@ -9,7 +9,6 @@ const SelectField = ({ label, options, onChange, name, value, error }) => {
 
     const handleChange = ({ target }) => {
         const item = optionsArray.find((option) => option._id === target.value);
-        console.log("select handle change", item);
         onChange({ target: { name, value: item } });
     };
 

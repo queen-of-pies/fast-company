@@ -5,9 +5,13 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import { useHistory, useParams } from "react-router-dom";
-import { useProfessions } from "../../hooks/useProfessions";
-import { useQualities } from "../../hooks/useQualities";
 import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../store/professions";
 
 const EditForm = () => {
     const [data, setData] = useState({
@@ -18,12 +22,11 @@ const EditForm = () => {
         qualities: []
     });
     const [errors, setErrors] = useState({});
-    const { professions, isLoading: isProfessionsLoaded } = useProfessions();
-
-    const { qualities, isLoading: isQualitiesLoaded } = useQualities();
-
+    const professions = useSelector(getProfessions());
+    const isProfessionsLoaded = useSelector(getProfessionsLoadingStatus());
+    const qualities = useSelector(getQualities());
+    const isQualitiesLoaded = useSelector(getQualitiesLoadingStatus());
     const { currentUser, updateUser } = useAuth();
-
     const history = useHistory();
     const { userId } = useParams();
 
