@@ -5,13 +5,17 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import { useHistory, useParams } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
 import {
     getProfessions,
     getProfessionsLoadingStatus
 } from "../../store/professions";
+import {
+    getCurrentUserData,
+    getCurrentUserId,
+    updateUser
+} from "../../store/users";
 
 const EditForm = () => {
     const [data, setData] = useState({
@@ -26,13 +30,15 @@ const EditForm = () => {
     const isProfessionsLoaded = useSelector(getProfessionsLoadingStatus());
     const qualities = useSelector(getQualities());
     const isQualitiesLoaded = useSelector(getQualitiesLoadingStatus());
-    const { currentUser, updateUser } = useAuth();
+    const currentUserId = useSelector(getCurrentUserId());
+    const currentUser = useSelector(getCurrentUserData());
+    const dispatch = useDispatch();
     const history = useHistory();
     const { userId } = useParams();
 
     useEffect(() => {
-        if (userId !== currentUser._id) {
-            history.push(`/users/${currentUser._id}/edit`);
+        if (userId !== currentUserId) {
+            history.push(`/users/${currentUserId}/edit`);
         }
     }, []);
 
@@ -91,12 +97,8 @@ const EditForm = () => {
                     ? data.profession
                     : data.profession._id
         };
-        try {
-            await updateUser(newData);
-            history.goBack();
-        } catch (error) {
-            setErrors(error);
-        }
+        dispatch(updateUser(newData));
+        history.goBack();
     };
 
     return (

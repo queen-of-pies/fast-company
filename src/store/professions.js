@@ -34,7 +34,7 @@ const {
 } = actions;
 
 export const loadProfessionsList = () => async (dispatch, getState) => {
-    const { lastFetch } = getState().qualities;
+    const { lastFetch } = getState().professions;
     if (isOutData(lastFetch, 10)) {
         dispatch(professionsRequested());
         try {
