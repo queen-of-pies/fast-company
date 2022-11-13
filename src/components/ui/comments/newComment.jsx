@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import validator from "../../../utils/validator";
-import { useComments } from "../../../hooks/useComments";
+import PropTypes from "prop-types";
+import { nanoid } from "nanoid";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUserId } from "../../../store/users";
+import { createComment } from "../../../store/comments";
 
-const NewComment = () => {
+const NewComment = ({ userId }) => {
     const [newComment, setNewComment] = useState({});
     const [errors, setErrors] = useState({});
-    const { createComment } = useComments();
+    const dispatch = useDispatch();
+    const currentUserId = useSelector(getCurrentUserId());
 
     useEffect(() => {
         validate();
@@ -35,7 +40,14 @@ const NewComment = () => {
     const handleSubmit = () => {
         const isValid = validate();
         if (!isValid) return;
-        createComment(newComment);
+        const comment = {
+            ...newComment,
+            _id: nanoid(),
+            pageId: userId,
+            created_at: Date.now(),
+            userId: currentUserId
+        };
+        dispatch(createComment(comment));
         setNewComment({});
     };
 
@@ -78,6 +90,10 @@ const NewComment = () => {
             </div>
         </div>
     );
+};
+
+NewComment.propTypes = {
+    userId: PropTypes.string.isRequired
 };
 
 export default NewComment;

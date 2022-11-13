@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { calculateCommentTime } from "../../../utils/calculateCommentTime";
-import { useComments } from "../../../hooks/useComments";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUserId, getUserById } from "../../../store/users";
+import { deleteComment } from "../../../store/comments";
 
 const Comment = ({ comment }) => {
-    const { deleteComment } = useComments();
+    const dispatch = useDispatch();
     const user = useSelector(getUserById(comment.userId));
     const currentUserId = useSelector(getCurrentUserId());
 
@@ -40,7 +40,9 @@ const Comment = ({ comment }) => {
                                         <button
                                             className="btn btn-sm text-primary d-flex align-items-center"
                                             onClick={() =>
-                                                deleteComment(comment._id)
+                                                dispatch(
+                                                    deleteComment(comment._id)
+                                                )
                                             }
                                         >
                                             <i className="bi bi-x-lg"></i>
