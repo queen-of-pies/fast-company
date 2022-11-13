@@ -2,14 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { calculateCommentTime } from "../../../utils/calculateCommentTime";
 import { useComments } from "../../../hooks/useComments";
-import { useUsers } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getCurrentUserId, getUserById } from "../../../store/users";
 
 const Comment = ({ comment }) => {
     const { deleteComment } = useComments();
-    const { getUserById } = useUsers();
-    const user = getUserById(comment.userId);
-    const { currentUser } = useAuth();
+    const user = useSelector(getUserById(comment.userId));
+    const currentUserId = useSelector(getCurrentUserId());
 
     if (!user) {
         return <></>;
@@ -37,7 +36,7 @@ const Comment = ({ comment }) => {
                                             )}
                                         </span>
                                     </p>
-                                    {currentUser._id === user._id && (
+                                    {currentUserId === user._id && (
                                         <button
                                             className="btn btn-sm text-primary d-flex align-items-center"
                                             onClick={() =>

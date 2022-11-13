@@ -5,14 +5,13 @@ import GroupList from "../../common/groupList";
 import SearchStatus from "../../ui/searchStatus";
 import UsersTable from "../../ui/usersTable";
 import _ from "lodash";
-import { useUsers } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { useDispatch, useSelector } from "react-redux";
 import {
     getProfessions,
     getProfessionsLoadingStatus,
     loadProfessionsList
 } from "../../../store/professions";
+import { getCurrentUserId, getUsers } from "../../../store/users";
 
 const UsersListPage = () => {
     const dispatch = useDispatch();
@@ -22,6 +21,8 @@ const UsersListPage = () => {
     const [search, setSearch] = useState("");
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
+    const users = useSelector(getUsers());
+    const currentUserId = useSelector(getCurrentUserId());
 
     useEffect(() => {
         dispatch(loadProfessionsList());
@@ -32,13 +33,6 @@ const UsersListPage = () => {
     }, [selectedProf]);
 
     const pageSize = 8;
-
-    const { users, deleteUser } = useUsers();
-    const { currentUser } = useAuth();
-
-    const handleDelete = (id) => {
-        deleteUser(id);
-    };
 
     const handleChange = (id) => {
         // const newState = users.map((user) => {
@@ -77,7 +71,7 @@ const UsersListPage = () => {
                   user.name.toLowerCase().includes(search.toLowerCase())
               )
             : data;
-        return filteredUsers.filter((user) => user._id !== currentUser._id);
+        return filteredUsers.filter((user) => user._id !== currentUserId);
     }
 
     if (users && users.length) {
@@ -123,7 +117,6 @@ const UsersListPage = () => {
                         <UsersTable
                             userCrop={userCrop}
                             onFavoritesChange={handleChange}
-                            onDelete={handleDelete}
                             onSort={handleSort}
                             selectedSort={sortBy}
                         />
