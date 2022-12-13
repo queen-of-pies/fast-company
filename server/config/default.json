@@ -1,0 +1,6 @@
+{
+  "port": 8080,
+  "mongoUri": "mongodb://root:123@mongo:27017/",
+  "accessSecret": "super secret",
+  "refreshSecret": "super refresh secret"
+}
